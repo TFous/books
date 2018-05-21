@@ -1,5 +1,6 @@
 const request = require('superagent');
 const cheerio = require('cheerio');
+require('superagent-charset')(request)
 
 var MongoClient = require('mongodb').MongoClient,
     Server = require('mongodb').Server;
@@ -21,6 +22,7 @@ async function getBooks() {
     return new Promise( (resolve, reject) =>{
         request
             .get('https://m.biquge.com.tw/wapsort/1_1.html')
+            .charset('gbk')
             .end((err, res) => {
                 if (err) {
                     return next(err);
@@ -38,13 +40,13 @@ async function getBooks() {
                     })
                 })
                 resolve(items);
-                return items
+                // return items
             })
     })
 
 }
 
-let book = getBooks().then(function (item) {
+getBooks().then(function (item) {
     console.log(item)
 })
 // console.log(book)
