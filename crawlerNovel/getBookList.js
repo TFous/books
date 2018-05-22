@@ -71,8 +71,6 @@ let errData = {
     jIndex:0
 }
 classifyMsg.then(async function (items) {
-    console.log(items)
-    console.log(errData)
   let dd = await starGetBooks(items)
     console.log(dd)
 })
@@ -86,12 +84,10 @@ async function starGetBooks(items) {
         for(;j<jLength;j++){
             let url = items[i].url.split('_')
             let jUrl = `${url[0].substring(0,29)}${i+1}_${j+1}.shtml`
-            console.log(jUrl)
-            // await getBooks(jUrl,items[i].classify,i,j)
+            await getBooks(jUrl,items[i].classify,i,j)
         }
     }
-    console.log(2222222222222)
-    return true    
+    return true
 }
 
 /**
@@ -149,19 +145,23 @@ async function getBooks(url,classify,i,j){
                     var author = $(element).find('.title span').text().split('作者：')[1];
                     var intro = $(element).find('.intro').text();
                     let imgSrc = $(element).find('img').attr('src');
+                    let href = link.attr('href')
+                    let code = href.split('/')
 
                     let item = {
                         iIndex: i,
                         jIndex: j,
                         intro: intro,
                         classify: classify,
-                        href: 'http://www.56shuku.org' + link.attr('href'),
+                        code: code[code.length-2],
+                        href: 'http://www.56shuku.org' + href,
                         name: link.text(),
                         author: author,
                     }
                     //抓取图片
                     await downImg(imgSrc)
-                    fs.appendFile(`./bookList/${classify}_小说列表.json`, JSON.stringify(item)+'\r\n', function (err) {
+
+                    fs.appendFile(`./bookList/bookList.json`, JSON.stringify(item)+'\r\n', function (err) {
                         if (err) {
                             console.log("文件写入失败")
                         } else {
