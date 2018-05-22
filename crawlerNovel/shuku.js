@@ -1,7 +1,8 @@
 const request = require('superagent');
 const cheerio = require('cheerio');
+var http = require("http");
+const fs = require('fs'); // 引入fs模块
 require('superagent-charset')(request)
-
 var MongoClient = require('mongodb').MongoClient,
     Server = require('mongodb').Server;
 
@@ -35,6 +36,24 @@ async function getBooks(url) {
                     var link = $(element).find('.title h2 a');
                     var author = $(element).find('.title span').text().split('作者：')[1];
                     var intro = $(element).find('.intro').text();
+                    let imgSrc = $(element).find('img').attr('src');
+                        //抓取图片
+                        http.get(imgSrc,function (res) {
+                            var imgData = "";
+                            res.setEncoding("binary"); //一定要设置response的编码为binary否则会下载下来的图片打不开
+                            res.on("data", function(chunk){
+                                imgData+=chunk;
+                            });
+                            res.on("end", function(){
+                                let imgId = imgSrc.split('/')
+                                fs.writeFile(`./images/${imgId[imgId.length-2]}.jpg`, imgData, "binary", function(err){
+                                    if(err){
+                                        console.log("down img fail");
+                                    }
+                                    // console.log("down success");
+                                });
+                            });
+                        })
                     items.push({
                         intro: intro,
                         tips: tips,
