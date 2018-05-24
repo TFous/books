@@ -66,20 +66,21 @@ let classifyMsg = classifyListUrl.then(async function (lists) {
     }
     return classifyMsg;
 })
-let errData = {
-    iIndex:0,
-    jIndex:0
-}
+
 classifyMsg.then(async function (items) {
-  let dd = await starGetBooks(items)
-    console.log(dd)
+    var data = fs.readFileSync('./writeBooks.json','utf-8');
+    let odata = data?JSON.parse(data):{}
+    let isOver = await starGetBooks(items,odata)
+    if(isOver===true){
+
+    }
 })
 
-async function starGetBooks(items) {
-    let i=errData.iIndex || 0;
+async function starGetBooks(items,data) {
+    let i=data.iIndex || 0;
     let length = items.length
     for(;i<length;i++){
-        let j=errData.jIndex || 0;
+        let j = data.jIndex ? data.jIndex + 1 : 0;
         let jLength = items[i].length
         for(;j<jLength;j++){
             let url = items[i].url.split('_')
@@ -165,7 +166,17 @@ async function getBooks(url,classify,i,j){
                         if (err) {
                             console.log("文件写入失败")
                         } else {
-                            console.log(classify)
+                            let data = {
+                                iIndex:i,
+                                jIndex:j
+                            }
+                            fs.writeFile('./writeBooks.json', JSON.stringify(data), function(err) {
+                                if (err) {
+                                    throw err;
+                                }
+                                console.log(data);
+                            });
+                            // console.log(classify)
                             // console.log('文件写入成功')
                         }
                     })
