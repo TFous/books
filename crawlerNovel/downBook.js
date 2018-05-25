@@ -9,35 +9,89 @@ var MongoClient = require('mongodb').MongoClient,
 const mongoClient = new MongoClient(new Server('localhost', 27017, {
     useNewUrlParser: true
 }));
+// var data = fs.readFileSync('./limit.json','utf-8');
 let limit = 2
-let skip = 0
+let skip = JSON.parse(fs.readFileSync('./limit.json','utf-8')).skip || 0
+
 mongoClient.connect(function (err, client) {
     if (err) throw err;
     var dbo = client.db("db_novel");
     let collection  = dbo.collection("booklist")
-    collection.find().limit(limit).skip(skip).toArray(async function(err, items) {
-        let i=0;
-        let length = items.length
-        for(;i<length;i++){
-            let item = items[i]
-           await getBookList(item.href).then(async function (lists) {
-                dbo.collection('node_books_chapters').insertOne({code:item.code,list:lists}, function (err, res) {
-                    if (err) throw err;
-                    console.log("小说章节插入数据库成功！");
-                });
-                downList(lists,item.code)
-            })
-        }
-    });
+    loopDown(skip)
+    function loopDown(skip) {
+        collection.count(async function (a, count) {
+            collection.find().limit(limit).skip(skip).toArray(async function(err, items) {
+                // let i=0;
+                // let length = items.length
+                // for(;i<length;i++){
+                //     let item = items[i]
+                //     await getBookList(item.href).then(async function (lists) {
+                //         dbo.collection('node_books_chapters').insertOne({code:item.code,list:lists}, function (err, res) {
+                //             if (err) throw err;
+                //             // console.log("小说章节插入数据库成功！");
+                //         });
+                //         downList(lists,item.code)
+                //     })
+                // }
+                await Promise.all(items.map(async (item) => {
+                    await getBookList(item.href).then(async function (lists) {
+                        dbo.collection('node_books_chapters').insertOne({code:item.code,list:lists}, function (err, res) {
+                            if (err) throw err;
+                            // console.log("小说章节插入数据库成功！");
+                        });
+                       await downList(lists,item.code)
+                    })
+                }));
+
+                let newSkpi = JSON.parse(fs.readFileSync('./limit.json','utf-8')).skip+ limit
+                let data = {
+                    skip: newSkpi
+                }
+                await fs.writeFile(`./limit.json`, JSON.stringify(data), function (err) {
+                    if (err) {
+                        console.log("文件写入失败")
+                    } else {
+                        console.log('========更新skip成功=============')
+                        // console.log(id + "===========>" + i + "========文件追加成功");
+                    }
+                })
+                if(newSkpi<count){
+                    loopDown(newSkpi)
+                }
+            });
+        })
+
+    }
+
 });
 
 async function downList(lists,code) {
-    let j = 0;
-    let jlen = lists.length;
-    for (;j<jlen;j++){
-        let url = lists[j].href
-        await downChapter(url,code,j)
-    }
+    let dirPath = `./downLoad/${code}/`
+    await new Promise(function(){
+        fs.exists(dirPath,async function(exists,fd){
+            if(exists){
+                fs.readdir(dirPath,async function(err, files){
+                    if (err) {
+                        return console.error(err);
+                    }
+                    let index = files.length -1
+                    let j = index;
+                    let jlen = lists.length;
+                    for (;j<jlen;j++){
+                        let url = lists[j].href
+                        await downChapter(url,code,j)
+                    }
+                });
+            }else {
+                let j = 0;
+                let jlen = lists.length;
+                for (;j<jlen;j++){
+                    let url = lists[j].href
+                    await downChapter(url,code,j)
+                }
+            }
+        })
+    })
 }
 async function downChapter(url,code,index){
     return new Promise((resolve, reject) =>{
