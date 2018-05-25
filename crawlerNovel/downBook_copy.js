@@ -7,7 +7,10 @@ var MongoClient = require('mongodb').MongoClient,
     Server = require('mongodb').Server;
 
 const mongoClient = new MongoClient(new Server('localhost', 27017, {
-    useNewUrlParser: true
+    auth: {
+        user:'root',
+        password:'123456'
+    }
 }));
 // var data = fs.readFileSync('./limit.json','utf-8');
 let limit = 10
@@ -39,7 +42,7 @@ mongoClient.connect(function (err, client) {
                             if (err) throw err;
                             // console.log("小说章节插入数据库成功！");
                         });
-                        await downList(lists,item.code)
+                       await downList(lists,item.code)
                     })
                 }));
 

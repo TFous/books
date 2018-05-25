@@ -48,6 +48,10 @@ async function getClassify(url) {
     })
 }
 
+// 每一类小说最大数  目前是每页 30 * 页数,30 的倍数
+let maxClassIfyBook = 1
+
+
 let classifyUrl = 'http://www.56shuku.org/leibie1_1.shtml'
 // 小说分类列表url
 let classifyListUrl = getClassify(classifyUrl).then(async function (listsUrl) {
@@ -72,23 +76,37 @@ classifyMsg.then(async function (items) {
     let odata = data?JSON.parse(data):{}
     let isOver = await starGetBooks(items,odata)
     if(isOver===true){
+            let cmdstr = `mongoimport -u root -p 123456 --db db_novel --collection novel_books_List --file ./bookList/bookList.json`
+            var exec = require('child_process').exec;
+            exec(cmdstr,
+                function (error, stdout, stderr) {
+                    if (error !== null) {
+                        console.log('exec error: ' + error);
+                    }
+                    console.log('图书列表导入数据库完成')
+                });
 
+        console.log('===================获取列表结束=====================')
     }
 })
 
 async function starGetBooks(items,data) {
-    let i=data.iIndex || 0;
-    let length = items.length
-    for(;i<length;i++){
-        let j = data.jIndex ? data.jIndex + 1 : 0;
-        let jLength = items[i].length
-        for(;j<jLength;j++){
-            let url = items[i].url.split('_')
-            let jUrl = `${url[0].substring(0,29)}${i+1}_${j+1}.shtml`
-            await getBooks(jUrl,items[i].classify,i,j)
+    return await new Promise(async(resolve, reject) =>{
+        let i=data.iIndex || 0;
+        let length = items.length
+        for(;i<length;i++){
+            let j = data.jIndex ? data.jIndex + 1 : 0;
+            let jLength = items[i].length>maxClassIfyBook?maxClassIfyBook:items[i].length
+            for(;j<jLength;j++){
+                let url = items[i].url.split('_')
+                let jUrl = `${url[0].substring(0,29)}${i+1}_${j+1}.shtml`
+                await getBooks(jUrl,items[i].classify,i,j)
+                console.log(items[i].classify,i,j)
+            }
         }
-    }
-    return true
+        resolve(true)
+        // return true
+    })
 }
 
 /**
@@ -131,16 +149,6 @@ async function getBooks(url,classify,i,j){
                 var $ = cheerio.load(res.text);
                 // let tips = $('#alist h3').text().split('List')[1].split('小说最新列表')[0]
                 let lists = $('#alistbox')
-                // let dirpath = `./bookList/${tips}_小说列表`
-                // if (!fs.existsSync(dirpath)) {
-                //     await fs.mkdirSync(dirpath)
-                // }
-                // let bookListLength = $('#pagestats').text().split('/')[1]
-                // let i = 0;
-                // let length = bookListLength.length;
-                // for(;i<length;i++){
-                //
-                // }
                 lists.each(async function (idx, element) {
                     var link = $(element).find('.title h2 a');
                     var author = $(element).find('.title span').text().split('作者：')[1];
@@ -174,7 +182,7 @@ async function getBooks(url,classify,i,j){
                                 if (err) {
                                     throw err;
                                 }
-                                console.log(data);
+                                // console.log(data);
                             });
                             // console.log(classify)
                             // console.log('文件写入成功')
@@ -199,12 +207,17 @@ async function downImg(imgSrc) {
         });
         res.on("end", function(){
             let imgId = imgSrc.split('/')
-            fs.writeFile(`./images/${imgId[imgId.length-2]}.jpg`, imgData, "binary", function(err){
-                if(err){
-                    console.log("down img fail");
+            let dir = `./images/${imgId[imgId.length-2]}.jpg`
+            fs.exists(dir,function(exists,fd){
+                if(!exists){
+                    fs.writeFile(dir, imgData, "binary", function(err){
+                        if(err){
+                            console.log("down img fail");
+                        }
+                        // console.log("down success");
+                    });
                 }
-                // console.log("down success");
-            });
+            })
         });
     })
 }
