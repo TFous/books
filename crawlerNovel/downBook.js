@@ -6,20 +6,27 @@ require('superagent-charset')(request)
 var MongoClient = require('mongodb').MongoClient,
     Server = require('mongodb').Server;
 
-const mongoClient = new MongoClient(new Server('localhost', 27017, {
-    useNewUrlParser: true
-}));
+const mongoClient = new MongoClient('mongodb://localhost:27017',{
+    useNewUrlParser: true,
+    auth: {
+        user:'root',
+        password:'123456'
+    }
+});
 // var data = fs.readFileSync('./limit.json','utf-8');
-let limit = 10
+let limit = 2
 let skip = JSON.parse(fs.readFileSync('./limit.json','utf-8')).skip || 0
-
-mongoClient.connect(function (err, client) {
+MongoClient.connect("mongodb://root:123456@localhost:27017/db_novel", { useNewUrlParser: true }, function(err, client) {
+// mongoClient.connect(function(err, client) {
     if (err) throw err;
     var dbo = client.db("db_novel");
     let collection  = dbo.collection("novel_books_List")
+    // console.log(client)
+    // console.log(collection)
     loopDown(skip)
     function loopDown(skip) {
         collection.count(async function (a, count) {
+            console.log(count)
             collection.find().limit(limit).skip(skip).toArray(async function(err, items) {
                 // let i=0;
                 // let length = items.length
