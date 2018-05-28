@@ -95,6 +95,7 @@ async function starGetBooks(items,data) {
         let i=data.iIndex || 0;
         let length = items.length
         for(;i<length;i++){
+            console.log(i)
             let j = data.jIndex ? data.jIndex + 1 : 0;
             let jLength = items[i].length>maxClassIfyBook?maxClassIfyBook:items[i].length
             for(;j<jLength;j++){
