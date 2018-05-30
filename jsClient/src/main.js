@@ -3,9 +3,13 @@
 import Vue from 'vue'
 import App from './App'
 import router from './router'
-import ElementUI from 'element-ui';
-import 'element-ui/lib/theme-chalk/index.css';
-Vue.use(ElementUI);
+// import ElementUI from 'element-ui';
+// import 'element-ui/lib/theme-chalk/index.css';
+// Vue.use(ElementUI);
+import Vuetify from 'vuetify'
+// import 'vuetify/dist/vuetify.min.css'
+
+Vue.use(Vuetify)
 
 Vue.config.productionTip = false
 

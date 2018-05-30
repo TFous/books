@@ -5,5 +5,5 @@ module.exports = app => {
         href: { type: String  },
         name: { type: String  },
     });
-    return mongoose.model('Book', bookSchema,'novel_books');
+    return mongoose.model('Book', bookSchema,'novel_books_List');
 }

@@ -1,6 +1,6 @@
 <template>
   <div class="hello">
-    <div v-for="item in lists" @click="goChapter(item.index)">
+    <div v-for="(item,index) in lists" @click="goChapter(index)">
       {{item.name}}
     </div>
   </div>

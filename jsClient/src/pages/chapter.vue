@@ -42,8 +42,8 @@
         return resp.json();
       }).then(function (data) {
         console.log(data)
-        _this.title = data.data.title
-        _this.text = data.data.text
+        _this.title = data.data.name
+        _this.text = data.data.content
       })
     },
     methods:{
