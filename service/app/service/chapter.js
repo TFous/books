@@ -10,8 +10,6 @@ class ChapterService extends Service {
             if(err) console.log(err);
             return data
         });
-        console.log(data)
-        // console.log(data)
         return data
     }
 }

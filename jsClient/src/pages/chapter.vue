@@ -1,8 +1,7 @@
 <template>
   <div class="hello">
       <h1>{{title}}</h1>
-    <div>
-      {{text}}
+    <div v-html="text">
     </div>
   </div>
 </template>
@@ -43,7 +42,7 @@
       }).then(function (data) {
         console.log(data)
         _this.title = data.data.name
-        _this.text = data.data.content
+        _this.text = data.data.content.replace(/[\n\r]/g,'<br>')
       })
     },
     methods:{

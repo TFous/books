@@ -10,7 +10,8 @@ class ChapterController extends Controller {
         console.log(`===============${bookCode}========`)
         var response = { success: false, message: "操作失败" };
         // const bookInfo =await this.ctx.service.chapter.get(bookCode,chapterIndex);
-        let dir = 'F:/newWorkSpace/books/crawlerNovel/downLoad/'
+        let dir = '/usr/local/src/novel/downLoad'
+        // let dir = 'F:/newWorkSpace/books/crawlerNovel/downLoad/'
         let data = fs.readFileSync(`${dir}${bookCode}/${chapterIndex}.json`,'utf8');
         console.log(data)
         response.data = JSON.parse(data)
