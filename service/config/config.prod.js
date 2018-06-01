@@ -8,6 +8,9 @@ module.exports = appInfo => {
 
   // add your config here
   config.middleware = [];
+    config.data={
+        dir:'/usr/local/src/novel/downLoad/'
+    }
     config.mongoose  = {
         url: 'mongodb://127.0.0.1:27017/db_novel',
         options: {},
@@ -18,15 +21,12 @@ module.exports = appInfo => {
         credentials:true,
         allowMethods: 'GET,HEAD,PUT,POST,DELETE,PATCH'
     }
-    // exports.cluster = {
-    //     listen: {
-    //         port: 7001,
-    //         hostname: 'www.tengg.win',
-    //         // path: '/var/run/egg.sock',
-    //     }
-    // }
-    config.data={
-        dir:'F:/newWorkSpace/books/crawlerNovel/downLoad/'
+    exports.cluster = {
+        listen: {
+            port: 7001,
+            hostname: 'www.tengg.win',
+            // path: '/var/run/egg.sock',
+        }
     }
     config.security = {
         csrf: {

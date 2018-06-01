@@ -42,7 +42,7 @@
         <v-divider v-else-if="item.divider" :inset="item.inset" :key="index"></v-divider>
         <v-list-tile v-else :key="item.title" avatar @click="goChapterList(item.code)">
           <v-list-tile-avatar>
-            <img :src="'./static/images/novel/'+ item.code+'.jpg'">
+            <img :src="imgUrl + item.code+'.jpg'">
           </v-list-tile-avatar>
           <v-list-tile-content>
             <v-list-tile-title v-html="item.name"></v-list-tile-title>
@@ -59,6 +59,7 @@
     name: 'HelloWorld',
     data() {
       return {
+        imgUrl: this.$api.api + '/images/',
         items2: [
           { header: 'Today' },
           { avatar: '/static/images/6212.jpg',

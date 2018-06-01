@@ -125,7 +125,7 @@ async function downChapter(url, code, index, jlen) {
                 let data = {
                     index: index,
                     name: $('.border_l_r').find('h1').text(),
-                    content: $('#content').text()
+                    content: $('#content').html()
                 }
                 let dirpath = `./downLoad/${code}`
                 if (!fs.existsSync(dirpath)) {
