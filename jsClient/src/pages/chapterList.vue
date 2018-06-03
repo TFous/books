@@ -59,7 +59,6 @@
       fetch(requestHead).then(function (resp) {
         return resp.json();
       }).then(function (data) {
-        console.log(data)
         _this.lists = data.data.list
       })
     },

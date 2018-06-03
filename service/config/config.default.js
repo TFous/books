@@ -26,14 +26,15 @@ module.exports = appInfo => {
     //     }
     // }
     config.data={
-        dir:'F:/newWorkSpace/books/crawlerNovel/downLoad/'
+        dir:'F:/workSpace/books/crawlerNovel/downLoad/'
+        // dir:'F:/newWorkSpace/books/crawlerNovel/downLoad/'
     }
     config.security = {
         csrf: {
             enable: false,
             // headerName: 'x-csrf-token', // 通过 header 传递 CSRF token 的默认字段为 x-csrf-token
         },
-        domainWhiteList: [ 'http://localhost:8080','http://localhost:8081','http://tengg.win:7001']
+        domainWhiteList: [ 'http://localhost:8080','http://localhost:8081','http://tenggg.win:7001']
     };
   return config;
 };

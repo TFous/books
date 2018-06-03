@@ -9,4 +9,5 @@ module.exports = app => {
   router.post('/api/chapterList', controller.chapterList.get);
   router.post('/api/chapter', controller.chapter.get);
   router.post('/api/book', controller.book.get);
+  router.post('/api/filterClassify', controller.book.filter);
 };

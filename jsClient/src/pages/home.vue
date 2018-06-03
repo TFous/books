@@ -1,5 +1,5 @@
 <template>
-  <div class="hello">
+  <div class="home">
     <div class="carousel-wrap">
       <v-carousel hide-controls>
         <v-carousel-item v-for="(item,i) in items" :src="item.src" :key="i"></v-carousel-item>
@@ -8,46 +8,31 @@
 
     <v-container fluid class="pa-0">
       <v-layout row wrap>
-        <v-flex xs3>
-          <v-btn color="info">Info</v-btn>
-        </v-flex>
-        <v-flex xs3>
-          <v-btn color="info">Info</v-btn>
-        </v-flex>
-        <v-flex xs3>
-          <v-btn color="info">Info</v-btn>
-        </v-flex>
-        <v-flex xs3>
-          <v-btn color="info">Info</v-btn>
-        </v-flex>
-        <v-flex xs3>
-          <v-btn color="info">Info</v-btn>
-        </v-flex>
-        <v-flex xs3>
-          <v-btn color="info">Info</v-btn>
-        </v-flex>
-        <v-flex xs3>
-          <v-btn color="info">一二三四</v-btn>
-        </v-flex>
-        <v-flex xs3>
-          <v-btn color="info">Info</v-btn>
-        </v-flex>
+        <template v-for="item in classifys">
+          <v-flex xs3>
+            <v-btn color="info" @click="goClassify(item)">{{item.name}}</v-btn>
+          </v-flex>
+        </template>
       </v-layout>
     </v-container>
-
 
     <v-list two-line>
       <template v-for="(item, index) in items2">
         <v-subheader v-if="item.header" :key="item.header">{{ item.header }}</v-subheader>
         <v-divider v-else-if="item.divider" :inset="item.inset" :key="index"></v-divider>
-        <v-list-tile v-else :key="item.title" avatar @click="goChapterList(item.code)">
-          <v-list-tile-avatar>
+        <v-list-tile v-else :key="item.title" avatar @click="goChapter(item.code)">
+          <v-list-tile-avatar class="book-img">
             <img :src="imgUrl + item.code+'.jpg'">
           </v-list-tile-avatar>
           <v-list-tile-content>
             <v-list-tile-title v-html="item.name"></v-list-tile-title>
             <v-list-tile-sub-title v-html="item.intro"></v-list-tile-sub-title>
           </v-list-tile-content>
+          <v-list-tile-action>
+            <v-btn icon ripple>
+              <v-icon color="grey lighten-1">info</v-icon>
+            </v-btn>
+          </v-list-tile-action>
         </v-list-tile>
       </template>
     </v-list>
@@ -59,17 +44,9 @@
     name: 'HelloWorld',
     data() {
       return {
-        imgUrl: this.$api.api + '/images/',
-        items2: [
-          { header: 'Today' },
-          { avatar: '/static/images/6212.jpg',
-            title: 'Brunch this weekend?',
-            subtitle: "<span class='text--primary'>Ali Connors</span> &mdash; I'll be in your neighborhood doing errands this weekend. Do you want to hang out?" },
-          { divider: true, inset: true },
-          { avatar: '/static/images/13589.jpg', title: 'Summer BBQ <span class="grey--text text--lighten-1">4</span>', subtitle: "<span class='text--primary'>to Alex, Scott, Jennifer</span> &mdash; Wish I could come, but I'm out of town this weekend." },
-          { divider: true, inset: true },
-          { avatar: '/static/images/17757.jpg', title: 'Oui oui', subtitle: "<span class='text--primary'>Sandra Adams</span> &mdash; Do you have Paris recommendations? Have you ever been?" }
-        ],
+        classifys:this.$api.classifys,
+        imgUrl: this.$api.imgUrl,
+        items2: [],
         items: [
           {
             src: '/static/images/0.jpg'
@@ -111,12 +88,26 @@
       })
     },
     methods: {
-      goChapterList(code) {
+      goChapter(code) {
         this.$router.push({
-          name: 'chapterList',
-          params: {code: code}
+          name: 'chapter',
+          params: {
+            index:0,
+            code:code
+          }
+        })
+        // this.$router.push({
+        //   name: 'chapterList',
+        //   params: {code: code}
+        // })
+      },
+      goClassify(item){
+        this.$router.push({
+          name: 'classify',
+          params: {code: item.code}
         })
       }
+
     }
 
   }
@@ -124,6 +115,20 @@
 
 <!-- Add "scoped" attribute to limit CSS to this component only -->
 <style>
+  /*.book-img{*/
+    /*width:100px!important;*/
+  /*}*/
+  /*.book-img .avatar{*/
+    /*border-radius: 0!important;*/
+    /*width: 80px!important;*/
+    /*height: 80px!important;*/
+  /*}*/
+  /*.book-img .avatar img{*/
+    /*border-radius: 0!important;*/
+  /*}*/
+  .home .pa-0 .btn{
+    margin: 6px 3px;
+  }
   .carousel{
     height: 298px;
   }

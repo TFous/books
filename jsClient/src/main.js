@@ -14,9 +14,23 @@ Vue.use(Vuetify)
 Vue.config.productionTip = false
 
 let api = localStorage.getItem('api')
+let imgUrl = localStorage.getItem('imgUrl')
+
+let classifys = [
+  {name:'玄幻魔法',code:0},
+  {name:'武侠修真',code:1},
+  {name:'都市言情',code:2},
+  {name:'历史军事',code:3},
+  {name:'侦探推理',code:4},
+  {name:'游戏竞技',code:5},
+  {name:'科幻小说',code:6},
+  {name:'恐怖灵异',code:7}
+]
 
 Vue.prototype.$api={
-  api
+  imgUrl,
+  api,
+  classifys
 }
 
 /* eslint-disable no-new */

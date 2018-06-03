@@ -14,6 +14,18 @@ class BooksController extends Controller {
         this.ctx.body = response;
         this.ctx.status = 200;
     }
+    async filter(){
+        const classify = this.ctx.request.body.classify;
+        console.log(111111111111111)
+        console.log(this.ctx.request.body)
+        var response = { success: false, message: "操作失败" };
+        const bookInfo =await this.ctx.service.book.filter(classify);
+        response.message = "操作成功";
+        response.success = true;
+        response.data = bookInfo;
+        this.ctx.body = response;
+        this.ctx.status = 200;
+    }
 }
 
 module.exports = BooksController;
