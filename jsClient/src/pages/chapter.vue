@@ -29,8 +29,8 @@
 
         <v-card>
           <v-toolbar dark class="reader-header" v-show="isShow">
-            <v-btn icon @click="goBack">
-              <v-icon>chevron_left</v-icon>
+            <v-btn icon @click="goHome">
+              <v-icon>home</v-icon>
             </v-btn>
             <v-toolbar-title>{{title}}</v-toolbar-title>
             <v-spacer></v-spacer>
@@ -110,11 +110,11 @@
     },
     methods: {
       preChapter(){
-        let index = this.chapterIndex - 1 < 0 ?0: this.chapterIndex - 1
+        let index = Number(this.chapterIndex) - 1 < 0 ?0: Number(this.chapterIndex) - 1
         this.getChapter(index.toString())
       },
       nextChapter(){
-        let index = this.chapterIndex + 1 > this.chapterLength ? this.chapterLength : this.chapterIndex + 1
+        let index = Number(this.chapterIndex) + 1 > this.chapterLength ? this.chapterLength : Number(this.chapterIndex) + 1
         this.getChapter(index.toString())
       },
       toggleMenu(){
@@ -230,6 +230,9 @@
       },
       goBack(){
         window.history.go(-1)
+      },
+      goHome(){
+        location.href='/'
       }
     }
 

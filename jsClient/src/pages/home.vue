@@ -30,7 +30,7 @@
           </v-list-tile-content>
           <v-list-tile-action>
             <v-btn icon ripple>
-              <v-icon color="grey lighten-1">info</v-icon>
+              <v-icon color="grey lighten-1">send</v-icon>
             </v-btn>
           </v-list-tile-action>
         </v-list-tile>

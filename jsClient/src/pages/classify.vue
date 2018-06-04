@@ -1,5 +1,5 @@
 <template>
-  <div class="home">
+  <div class="classify-wrap">
     <v-layout row>
       <v-flex xs12 sm6 offset-sm3>
         <v-card>
@@ -25,26 +25,11 @@
                 </v-list-tile-content>
                 <v-list-tile-action>
                   <v-btn icon ripple>
-                    <v-icon color="grey lighten-1">info</v-icon>
+                    <v-icon color="grey lighten-1">send</v-icon>
                   </v-btn>
                 </v-list-tile-action>
               </v-list-tile>
             </v-list>
-            <!--<v-list two-line>-->
-              <!--<template v-for="(item, index) in items2">-->
-                <!--<v-subheader v-if="item.header" :key="item.header">{{ item.header }}</v-subheader>-->
-                <!--<v-divider v-else-if="item.divider" :inset="item.inset" :key="index"></v-divider>-->
-                <!--<v-list-tile v-else :key="item.title" avatar @click="goChapterList(item.code)">-->
-                  <!--<v-list-tile-avatar>-->
-                    <!--<img :src="imgUrl + item.code+'.jpg'">-->
-                  <!--</v-list-tile-avatar>-->
-                  <!--<v-list-tile-content>-->
-                    <!--<v-list-tile-title v-html="item.name"></v-list-tile-title>-->
-                    <!--<v-list-tile-sub-title v-html="item.intro"></v-list-tile-sub-title>-->
-                  <!--</v-list-tile-content>-->
-                <!--</v-list-tile>-->
-              <!--</template>-->
-            <!--</v-list>-->
           </div>
         </v-card>
       </v-flex>
@@ -58,7 +43,7 @@
     data() {
       return {
         title: '',
-        imgUrl: this.$api.api + '/images/',
+        classifys:this.$api.classifys,
         items2: [],
       }
     },
@@ -109,6 +94,15 @@
 
 <!-- Add "scoped" attribute to limit CSS to this component only -->
 <style>
+  .classify-wrap .toolbar__content{
+    /*position: fixed;*/
+    /*top:0px;*/
+    /*width: 100%;*/
+    /*z-index: 99999;*/
+  }
+  .card{
+    border-radius: 0px;
+  }
   .home .pa-0 .btn{
     margin: 6px 3px;
   }
